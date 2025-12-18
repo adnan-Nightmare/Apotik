@@ -7,8 +7,8 @@ const ProductCard = ({ product, onSelect }) => {
             style={{ cursor: "pointer" }}
             onClick={() => onSelect(product)}
         >
-            <div className="row g-0">
-                <div className="col-md-4">
+            <div className="row g-0 align-items-center h-100">
+                <div className="col-md-4 ">
                     <img
                         src={`/storage/obats/${product.gambar_obat}`}
                         className="rounded-start"

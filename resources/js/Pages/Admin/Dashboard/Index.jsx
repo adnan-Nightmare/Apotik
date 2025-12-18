@@ -60,17 +60,17 @@ const isEmpty = (data) =>
     (Array.isArray(data) ? data.length === 0 : Object.keys(data).length === 0);
 
 const StatCard = ({ color, icon, title, value }) => (
-    <div className="col-6 col-md-4 col-lg-3 mb-3">
-        <div className="card shadow-sm h-100 p-4 d-flex flex-column justify-content-between">
-            <div className="row g-0 gap-3">
+    <div className="col-12 col-sm-6 col-md-3 mb-3">
+        <div className="card shadow-sm h-100 ">
+            <div className="card-body p-3 d-flex align-items-center">
                 <div
-                    className="d-flex justify-content-center align-items-center rounded col-md-3 h-100"
-                    style={{ backgroundColor: color }}
+                    className="flex-shrink-0 me-3 rounded d-flex align-items-center justify-content-center"
+                    style={{ backgroundColor: color, width: "50px", height: "50px", minWidth: '50px' }}
                 >
                     <i className={icon} style={{ fontSize: 25 }}></i>
                 </div>
-                <div className="col-md-6">
-                    <h6 className="text-body-tertiary">{title}</h6>
+                <div className="flex-grow-1">
+                    <h6 className="text-body-tertiary" style={{ fontSize: '0.8rem' }}>{title}</h6>
                     <h5 className="fw-bold">{value}</h5>
                 </div>
             </div>
@@ -100,8 +100,14 @@ const STAT_PERMISSION_MAP = {
 };
 
 const Index = () => {
-    const { stats, transactionData, salesData, productsData, obats, categoryData } =
-        usePage().props;
+    const {
+        stats,
+        transactionData,
+        salesData,
+        productsData,
+        obats,
+        categoryData,
+    } = usePage().props;
 
     // tempat menghitung item / obat yg kadaluarsa
     const statusKadaluarsaItems = useMemo(() => {
@@ -193,7 +199,7 @@ const Index = () => {
 
                     {/* charts */}
                     <div className="row g-4 my-4">
-                    {/* Chart Pie : Persentase Status Kadaluarsa */}
+                        {/* Chart Pie : Persentase Status Kadaluarsa */}
                         {hasAnyPermission([
                             "dashboard.view_persediaan_obat",
                         ]) && (

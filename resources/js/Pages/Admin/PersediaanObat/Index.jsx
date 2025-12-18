@@ -5,6 +5,7 @@ import Pagination from "../../../Components/Pagination";
 import Swal from "sweetalert2";
 import StatusBadge from "../../../Components/StatusBadget";
 import hasAnyPermission from "../../../utils/hasAnyPermission";
+import { formatRupiah } from "../../../utils/formatRupiah";
 
 const Index = () => {
     const { obats } = usePage().props;
@@ -154,6 +155,8 @@ const Index = () => {
                                                                             obat.gambar_obat
                                                                         }
                                                                         width="50"
+                                                                        height="50"
+                                                                        style={{ objectFit: "contain" }}
                                                                     />
                                                                 </td>
                                                                 <td>
@@ -177,13 +180,10 @@ const Index = () => {
                                                                 </td>
                                                                 <td>
                                                                     {obat.stok ||
-                                                                        "Gambar tidak ada"}
+                                                                        "Stok tidak ada"}
                                                                 </td>
                                                                 <td>
-                                                                    {obat.harga
-                                                                        ? "Rp " +
-                                                                          obat.harga
-                                                                        : "Gambar tidak ada"}
+                                                                    {formatRupiah(obat.harga)}
                                                                 </td>
                                                                 <td>
                                                                     {obat.kadaluarsa ||
