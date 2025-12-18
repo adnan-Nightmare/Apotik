@@ -10,8 +10,8 @@ const Receipt = React.forwardRef(
           {/* Header Struk */}
           <div className="text-center mb-3">
             <h5 className="mb-1 fw-bold">{nama_app}</h5>
-            <p className="mb-1">Jl. Raya No. 123, Sleman, Yogyakarta</p>
-            <p className="mb-1">Tel: (021) 12345678</p>
+            <p className="mb-1">Jl. Solok - Simpang Tj. Nan IV No. 27316, Solok, Sumatera Barat</p>
+            <p className="mb-1">Tel: 0811665460</p>
             {/* Garis pembatas */}
             <div className="border-bottom border-dark mb-2">
               <small>Tanggal: {new Date().toLocaleDateString()}</small>
