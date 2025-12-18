@@ -39,6 +39,7 @@ const Index = () => {
         errors,
         auth,
         payment_link_url,
+        nama_app,
         carts = [],
         categories = [],
         products = [],
@@ -652,6 +653,7 @@ const Index = () => {
                                 totalAmount={transactionSnapshot.totalAmount}
                                 cash={transactionSnapshot.cash}
                                 change={transactionSnapshot.change}
+                                nama_app={nama_app}
                             />
                         </div>
                     )}

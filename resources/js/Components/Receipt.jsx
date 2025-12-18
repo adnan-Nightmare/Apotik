@@ -2,14 +2,14 @@ import React from "react";
 import { formatRupiah } from "../utils/formatRupiah";
 
 const Receipt = React.forwardRef(
-  ({ cartItems, subTotal, discount = 0, totalAmount, cash, change }, ref) => {
+  ({ cartItems, subTotal, discount = 0, totalAmount, cash, change, nama_app }, ref) => {
     return (
       <div ref={ref} className="min-vh-100 d-flex justify-content-center align-items-center bg-light">
         {/* Container utama struk */}
         <div className="bg-white border rounded shadow p-4 small" style={{ maxWidth: "350px" }}>
           {/* Header Struk */}
           <div className="text-center mb-3">
-            <h5 className="mb-1 fw-bold">Apotik Jago</h5>
+            <h5 className="mb-1 fw-bold">{nama_app}</h5>
             <p className="mb-1">Jl. Raya No. 123, Sleman, Yogyakarta</p>
             <p className="mb-1">Tel: (021) 12345678</p>
             {/* Garis pembatas */}
