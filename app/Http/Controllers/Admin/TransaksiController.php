@@ -7,7 +7,6 @@ use App\Models\Cart;
 use App\Models\customer;
 use App\Models\kategori;
 use App\Models\medicines;
-use App\Models\StockTotal;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
