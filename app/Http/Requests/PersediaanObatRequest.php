@@ -32,7 +32,6 @@ class PersediaanObatRequest extends FormRequest
             'nomor_batch' => 'required|string|max:255',
             'kategori_id' => 'required|exists:kategoris,id',
             'satuan_id' => 'required|exists:satuans,id',
-            'stok' => 'required',
             'harga' => 'required',
             'kadaluarsa' => 'required',
         ];

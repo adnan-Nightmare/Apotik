@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\customer;
 use App\Models\medicines;
+use App\Models\StockTotal;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use Carbon\Carbon;
@@ -61,11 +62,11 @@ class DashboardController extends Controller
         $obat = medicines::all();
 
         // Total stok per kategori
-        $stockTotals = medicines::with('kategori')->get();
-        $groupedByCategory = $stockTotals->groupBy(fn($item) => optional($item->kategori)->nama_kategori);
+        $stockTotals = StockTotal::with('medicines.kategori')->get();
+        $groupedByCategory = $stockTotals->groupBy(fn($item) => optional($item->medicines->kategori)->nama_kategori);
         $categoryData = $groupedByCategory->map(fn($items, $cat) => [
             'category'    => $cat,
-            'total_stock' => $items->sum('stok'),
+            'total_stock' => $items->sum('total_stock'),
             ])->values();
 
         // Kirim data ke Inertia

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('nomor_batch');
             $table->unsignedBigInteger('kategori_id');
             $table->unsignedBigInteger('satuan_id');
-            $table->integer('stok');
             $table->bigInteger('harga');
             $table->date(column: 'kadaluarsa');
             $table->timestamps();

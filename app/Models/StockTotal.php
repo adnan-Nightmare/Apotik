@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class StockTotal extends Model
 {
     protected $guarded = [];
-
-    public function medicine()
+    public function medicines()
     {
-        return $this->belongsTo(medicines::class);
+        return $this->belongsTo(medicines::class, 'medicines_id');
     }
 }

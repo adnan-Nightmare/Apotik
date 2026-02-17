@@ -16,4 +16,9 @@ class medicines extends Model
     public function satuan(){
         return $this->belongsTo(satuan::class);
     }
+
+    public function stockTotal()
+    {
+        return $this->hasOne(StockTotal::class);
+    }
 }

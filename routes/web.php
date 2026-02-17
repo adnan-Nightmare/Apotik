@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\KadaluarsaController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\PersediaanObat;
+use App\Http\Controllers\Admin\ProductStockController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SatuanController;
@@ -64,6 +66,18 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
             'controller' => PersediaanObat::class,
             'permissions' => 'persediaan-obat.index|persediaan-obat.create|persediaan-obat.edit|persediaan-obat.delete',
             'name' => 'medicine'
+        ],
+
+        'stock' => [
+            'controller' => ProductStockController::class,
+            'permissions' => 'stock.index|stock.create|stock.edit|stock.delete',
+            'name' => 'stock'
+        ],
+
+        'kadaluarsa' => [
+            'controller' => KadaluarsaController::class,
+            'permissions' => 'kadaluarsa.index|kadaluarsa.create|kadaluarsa.edit|kadaluarsa.delete',
+            'name' => 'kadaluarsa'
         ],
     ];
 

@@ -86,7 +86,7 @@ class TransaksiController extends Controller
             'customer_id' => 'nullable|exists:customers,id',
             'medicines_id' => 'required|exists:medicines,id',
             'quantity' => 'required|integer|min:1',
-            'total_price' => 'required|numeric|min:1000',
+            'total_price' => 'required|numeric|min:1000',   
         ]);
 
         $userId = Auth::id();
@@ -97,7 +97,7 @@ class TransaksiController extends Controller
             return redirect()->route('login');
         }
 
-        $productStock = medicines::where('id', $validatedData['medicines_id'])->value('stok');
+        $productStock = StockTotal::where('id', $validatedData['medicines_id'])->value('total_stock');
         if ($productStock === 0) {
             return redirect()->back()->withErrors(['quantity' => 'Stok produk masih 0.']);
         }
@@ -182,17 +182,17 @@ class TransaksiController extends Controller
 
             foreach ($validated['cart_items'] as $item) {
                 $product = medicines::find($item['medicines_id']);
-                // $stockTotal = StockTotal::where('product_id', $product->id)->first();
+                $stockTotal = StockTotal::where('medicines_id', $product->id)->first();
 
-                if ($product->stok < $item['quantity']) {
+                if (!$stockTotal || $stockTotal->total_stock < $item['quantity']) {
                     return redirect()->back()->withErrors([
                         'quantity' => "Stok produk untuk {$product->nama_obat} tidak mencukupi. Stok saat ini: "
-                            . ($product->stok ?? 0)
+                            . ($stockTotal->total_stock ?? 0)
                     ]);
                 }
 
-                $product->stok -= $item['quantity'];
-                $product->save();
+                $stockTotal->total_stock -= $item['quantity'];
+                $stockTotal->save();
 
                 $transaction->transactionDetails()->create([
                     'medicines_id' => $item['medicines_id'],

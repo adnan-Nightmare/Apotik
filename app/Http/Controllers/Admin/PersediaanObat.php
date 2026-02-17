@@ -25,7 +25,7 @@ class PersediaanObat extends Controller
         // Jika ada pencarian 'q', filter berdasarkan nama obat.
         // Data diurutkan berdasarkan waktu terbaru (latest), lalu dipaginasi (10 per halaman).
 
-        $obats = medicine::with(['kategori', 'satuan'])
+        $obats = medicine::with(['kategori', 'satuan', 'stockTotal'])
             ->when(request()->q, function ($query) {
                 $query->where('nama_obat', 'like', '%' . request()->q . '%');
             })
@@ -108,7 +108,6 @@ class PersediaanObat extends Controller
         $medicine->harga = $request->harga;
         $medicine->kategori_id = $request->kategori_id;
         $medicine->satuan_id = $request->satuan_id;
-        $medicine->stok = $request->stok;
         $medicine->nomor_batch = $request->nomor_batch;
         $medicine->kadaluarsa = $request->kadaluarsa;
         $medicine->save();

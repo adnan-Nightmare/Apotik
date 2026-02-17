@@ -17,6 +17,10 @@ class PermissionsTableSeeder extends Seeder
             'dashboard' => ['index','view_persediaan_obat' , 'view_sales', 'view_transactions', 'view_products', 'view_customers'],
             'users' => ['index', 'create', 'edit', 'delete'],
             'roles' => ['index', 'create', 'edit', 'delete'],
+
+            'kadaluarsa' => ['index', 'create', 'edit', 'delete'],
+            'stock' => ['index', 'create', 'edit', 'delete'],
+
             'persediaan-obat' => ['index', 'create', 'edit', 'delete'],
             'satuan' => ['index', 'create', 'edit', 'delete'],
             'kategori' => ['index', 'create', 'edit', 'delete'],

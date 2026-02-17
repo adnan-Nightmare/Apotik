@@ -116,6 +116,8 @@ const Login = ({ nama_app }) => {
                                     )}
                                 </button>
                             </form>
+
+                            <p className="text-center mt-2">alamat contoh</p>
                         </div>
                     </div>
                 </div>

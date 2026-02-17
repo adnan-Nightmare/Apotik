@@ -27,13 +27,7 @@ const Sidebar = () => {
 
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item mt-3 mb-1 text-muted">Inventory</li>
-                    {hasAnyPermission(["persediaan-obat.index"]) && (
-                        <NavItem
-                            href="/admin/medicine"
-                            label="Persediaan Obat"
-                            icon="bi-box-seam"
-                        />
-                    )}
+
                     {hasAnyPermission(["kategori.index"]) && (
                         <NavItem
                             href="/admin/kategori"
@@ -48,10 +42,34 @@ const Sidebar = () => {
                             icon="bi-tag"
                         />
                     )}
+
+                    {hasAnyPermission(["persediaan-obat.index"]) && (
+                        <NavItem
+                            href="/admin/medicine"
+                            label="Persediaan Obat"
+                            icon="bi-box-seam"
+                        />
+                    )}
+
+                    {hasAnyPermission(["stock.index"]) && (
+                        <NavItem
+                            href="/admin/stock"
+                            label="Stok Obat"
+                            icon="bi-archive"
+                        />
+                    )}
                 </ul>
 
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item mt-3 mb-1 text-muted">Laporan</li>
+                    {hasAnyPermission(["kadaluarsa.index"]) && (
+                        <NavItem
+                            href="/admin/kadaluarsa"
+                            label="Kadaluarsa"
+                            icon="bi-calendar2-range"
+                        />
+                    )}
+
                     {hasAnyPermission(["laporan.index"]) && (
                         <NavItem
                             href="/admin/report"

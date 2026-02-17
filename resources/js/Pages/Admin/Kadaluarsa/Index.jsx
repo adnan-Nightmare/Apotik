@@ -2,17 +2,23 @@ import React, { useState } from "react";
 import AdminLayout from "../../../Layouts/AdminLayout";
 import { Link, usePage } from "@inertiajs/react";
 import StatusBadge from "../../../Components/StatusBadget";
+import hasAnyPermission from "../../../utils/hasAnyPermission";
 
 const Index = () => {
     const { obats, status, today, threshold } = usePage().props;
     const [filterText, setFilterText] = useState("");
 
-    const filteredObats = obats.data.filter((obat) =>
-        obat.nama_obat.toLowerCase().includes(filterText.toLowerCase()) ||
-        obat.nomor_batch.toLowerCase().includes(filterText.toLowerCase())
-    );
-    console.log(filteredObats);
- 
+    console.log(obats);
+
+    const calculateRemainingDays = (expDate) => {
+        const exp = new Date(expDate);
+        const now = new Date();
+        const diffTime = exp - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
+    };
+
+    console.log(obats);
 
     return (
         <AdminLayout>
@@ -45,17 +51,6 @@ const Index = () => {
                     <div className="col-12">
                         <div className="card border rounded">
                             <div className="card-body p-0">
-                                <div className="d-flex justify-content-end align-items-center">
-                                    <input
-                                        type="text"
-                                        className="form-control my-2 me-2 w-25"
-                                        placeholder="Search"
-                                        value={filterText}
-                                        onChange={(e) =>
-                                            setFilterText(e.target.value)
-                                        }
-                                    />
-                                </div>
                                 <div className="table-responsive pb-1">
                                     <table className="table align-middle table-hover">
                                         <thead className="table-light text-white">
@@ -63,90 +58,86 @@ const Index = () => {
                                                 <th className="text-center">
                                                     No.
                                                 </th>
+                                                <th>Gambar</th>
                                                 <th>Nama obat</th>
                                                 <th>Nomor batch</th>
                                                 <th>Stok</th>
                                                 <th>Kadaluarsa</th>
                                                 <th>Status</th>
-                                                <th className="text-center">
-                                                    Actions
-                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {filteredObats.length > 0 ? (
-                                                filteredObats.map(
+                                            {obats.data.length > 0 ? (
+                                                obats.data.map(
                                                     (obat, index) => {
                                                         const sisaHari =
                                                             calculateRemainingDays(
-                                                                obat.kadaluarsa
+                                                                obat.kadaluarsa,
                                                             );
                                                         const isKadaluarsa =
-                                                            sisaHari < 0;
+                                                            sisaHari <= 0;
                                                         const isHampir =
                                                             sisaHari >= 0 &&
                                                             sisaHari <= 30;
+                                                        return (
+                                                            <tr key={obat.id}>
+                                                                <td className="text-center">
+                                                                    {index +
+                                                                        1 +
+                                                                        (obats.current_page -
+                                                                            1) *
+                                                                            obats.per_page}
+                                                                </td>
+                                                                <td>
+                                                                    <img
+                                                                        src={`/storage/obats/${obat.gambar_obat}`}
+                                                                        alt={
+                                                                            obat.gambar_obat
+                                                                        }
+                                                                        width="50"
+                                                                        height="50"
+                                                                        style={{
+                                                                            objectFit:
+                                                                                "contain",
+                                                                        }}
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    {obat.nama_obat ||
+                                                                        "Nama tidak tersedia"}
+                                                                </td>
+                                                                <td>
+                                                                    {obat.nomor_batch ||
+                                                                        "Nomor batch tidak tersedia"}
+                                                                </td>
 
-                                                        if (
-                                                            isKadaluarsa ||
-                                                            isHampir
-                                                        ) {
-                                                            return (
-                                                                <tr
-                                                                    key={
-                                                                        obat.id
-                                                                    }
-                                                                >
-                                                                    <td className="text-center">
-                                                                        {index +
-                                                                            1 +
-                                                                            (obats.current_page -
-                                                                                1) *
-                                                                                obats.per_page}
-                                                                    </td>
-                                                                    <td>
-                                                                        {obat.nama_obat ||
-                                                                            "obat tidak ada"}
-                                                                    </td>
-                                                                    <td>
-                                                                        {obat.nomor_batch ||
-                                                                            "-"}
-                                                                    </td>
-                                                                    <td>
-                                                                        {obat.stok ||
-                                                                            "-"}
-                                                                    </td>
-                                                                    <td>
-                                                                        {obat.kadaluarsa ||
-                                                                            "-"}
-                                                                    </td>
-                                                                    <td>
-                                                                        
-                                                                    </td>
-                                                                    <td className="text-center">
-                                                                        <Link
-                                                                            href={`/admin/obat/edit/${obat.id}`}
-                                                                            className="btn btn-outline-primary btn-sm me-2 rounded"
-                                                                        >
-                                                                            <i className="bi bi-pencil-fill"></i>{" "}
-                                                                            Edit
-                                                                        </Link>
-                                                                        <button
-                                                                            className="btn btn-outline-danger btn-sm rounded"
-                                                                            onClick={() =>
-                                                                                handleDelete(
-                                                                                    obat.id
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            <i className="bi bi-trash-fill"></i>{" "}
-                                                                            Delete
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            );
-                                                        }
-                                                    }
+                                                                <td>
+                                                                    {obat.stock_total
+                                                                        ? obat
+                                                                              .stock_total
+                                                                              .total_stock
+                                                                        : 0}
+                                                                </td>
+                                                                <td>
+                                                                    {obat.kadaluarsa ||
+                                                                        "Tanggal kadaluarsa tidak tersedia"}
+                                                                </td>
+                                                                <td>
+                                                                    <StatusBadge
+                                                                        isKadaluarsa={
+                                                                            isKadaluarsa
+                                                                        }
+                                                                        isHampir={
+                                                                            isHampir
+                                                                        }
+                                                                        sisaHari={
+                                                                            sisaHari
+                                                                        }
+                                                                    />
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    },
                                                 )
                                             ) : (
                                                 <tr>

@@ -1,9 +1,12 @@
 import { Link, router, useForm, usePage } from "@inertiajs/react";
 import AdminLayout from "../../../Layouts/AdminLayout";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 const ObatEdit = () => {
     const { kategori, satuan, obat, errors, nama_app } = usePage().props;
+    const [image, setImage] = useState();
+    const [preview, setPreview] = useState();
 
     const { data, setData, post, processing, reset } = useForm({
         nama_obat: obat.nama_obat,
@@ -12,9 +15,18 @@ const ObatEdit = () => {
         harga: obat.harga,
         gambar_obat: null,
         kadaluarsa: obat.kadaluarsa,
-        stok: obat.stok,
         nomor_batch: obat.nomor_batch,
     });
+
+    const handleChange = (e) => {
+        const file = e.target.files[0];
+        setData("gambar_obat", file);
+
+        if (file) {
+            setImage(file);
+            setPreview(URL.createObjectURL(file));
+        }
+    };
 
     const updateObat = (e) => {
         e.preventDefault();
@@ -194,7 +206,7 @@ const ObatEdit = () => {
                         </div>
                     </div>
                     <div className="row g-4 mt-1">
-                        <div className="col-md-7">
+                        <div className="col-md-5">
                             <label for="harga" className="form-label">
                                 Harga<span className="text-danger">*</span>
                             </label>
@@ -225,46 +237,37 @@ const ObatEdit = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="col-md-5">
-                            <label for="stok" className="form-label">
-                                Stok<span className="text-danger">*</span>
+                        <div class="col-md-7">
+                            <label for="formFile" className="form-label">
+                                Gambar obat
+                                <span className="text-danger">*</span>
                             </label>
                             <input
-                                type="number"
                                 className="form-control"
-                                id="stok"
-                                defaultValue="0"
-                                min="0"
-                                value={data.stok}
-                                onChange={(e) =>
-                                    setData("stok", e.target.value)
-                                }
+                                type="file"
+                                id="formFile"
+                                onChange={handleChange}
                             />
+                            {errors.gambar_obat && (
+                                <div className="invalid-feedback d-block">
+                                    {errors.gambar_obat}
+                                </div>
+                            )}
                         </div>
-                        {errors.stok && (
-                            <div className="invalid-feedback d-block">
-                                {errors.stok}
-                            </div>
+                    </div>
+
+                    <div className="mt-1 mb-3">
+                        {preview && (
+                            <img
+                                src={preview}
+                                alt="Preview"
+                                width={130}
+                                height={130}
+                                className="img-fluid rounded mt-2 border"
+                            />
                         )}
                     </div>
-                    <div class="mb-3">
-                        <label for="formFile" className="form-label">
-                            Gambar obat<span className="text-danger">*</span>
-                        </label>
-                        <input
-                            className="form-control"
-                            type="file"
-                            id="formFile"
-                            onChange={(e) =>
-                                setData("gambar_obat", e.target.files[0])
-                            }
-                        />
-                        {errors.gambar_obat && (
-                            <div className="invalid-feedback d-block">
-                                {errors.gambar_obat}
-                            </div>
-                        )}
-                    </div>
+
                     <div className="d-flex gap-3">
                         <button className="btn btn-primary px-4">Edit</button>
                         <Link

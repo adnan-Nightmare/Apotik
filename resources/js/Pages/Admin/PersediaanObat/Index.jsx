@@ -14,7 +14,7 @@ const Index = () => {
     const filteredObats = obats.data.filter(
         (obat) =>
             obat.nama_obat.toLowerCase().includes(filterText.toLowerCase()) ||
-            obat.nomor_batch.toLowerCase().includes(filterText.toLowerCase())
+            obat.nomor_batch.toLowerCase().includes(filterText.toLowerCase()),
     );
 
     const calculateRemainingDays = (expDate) => {
@@ -45,7 +45,7 @@ const Index = () => {
                         Swal.fire(
                             "Error!",
                             "Ada masalah saat menghapus kategori.",
-                            "error"
+                            "error",
                         );
                     },
                 });
@@ -132,7 +132,7 @@ const Index = () => {
                                                     (obat, index) => {
                                                         const sisaHari =
                                                             calculateRemainingDays(
-                                                                obat.kadaluarsa
+                                                                obat.kadaluarsa,
                                                             );
                                                         const isKadaluarsa =
                                                             sisaHari <= 0;
@@ -156,7 +156,10 @@ const Index = () => {
                                                                         }
                                                                         width="50"
                                                                         height="50"
-                                                                        style={{ objectFit: "contain" }}
+                                                                        style={{
+                                                                            objectFit:
+                                                                                "contain",
+                                                                        }}
                                                                     />
                                                                 </td>
                                                                 <td>
@@ -179,11 +182,16 @@ const Index = () => {
                                                                         "Tidak ada satuan obat"}
                                                                 </td>
                                                                 <td>
-                                                                    {obat.stok ||
-                                                                        "Stok tidak ada"}
+                                                                    {obat.stock_total
+                                                                        ? obat
+                                                                              .stock_total
+                                                                              .total_stock
+                                                                        : 0}
                                                                 </td>
                                                                 <td>
-                                                                    {formatRupiah(obat.harga)}
+                                                                    {formatRupiah(
+                                                                        obat.harga,
+                                                                    )}
                                                                 </td>
                                                                 <td>
                                                                     {obat.kadaluarsa ||
@@ -206,7 +214,7 @@ const Index = () => {
                                                                     {hasAnyPermission(
                                                                         [
                                                                             "persediaan-obat.edit",
-                                                                        ]
+                                                                        ],
                                                                     ) && (
                                                                         <Link
                                                                             href={`/admin/medicine/${obat.id}/edit`}
@@ -219,13 +227,13 @@ const Index = () => {
                                                                     {hasAnyPermission(
                                                                         [
                                                                             "persediaan-obat.delete",
-                                                                        ]
+                                                                        ],
                                                                     ) && (
                                                                         <button
                                                                             className="btn btn-outline-danger btn-sm rounded"
                                                                             onClick={() =>
                                                                                 handleDelete(
-                                                                                    obat.id
+                                                                                    obat.id,
                                                                                 )
                                                                             }
                                                                         >
@@ -236,7 +244,7 @@ const Index = () => {
                                                                 </td>
                                                             </tr>
                                                         );
-                                                    }
+                                                    },
                                                 )
                                             ) : (
                                                 <tr>
