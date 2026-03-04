@@ -23,7 +23,12 @@ class ProductStockRequest extends FormRequest
     {
         return [
             'medicines_id' => 'required|exists:medicines,id',
+            'supplier_id' => 'required|exists:suppliers,id',
             'stock_quantity' => 'required|integer|min:1',
+            'nomor_batch' => 'required|string|max:255',
+            'harga_beli' => 'required',
+            'kadaluarsa' => 'required|date',
+            'received_at' => 'required|date',
         ];
     }
 }

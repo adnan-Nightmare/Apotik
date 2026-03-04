@@ -7,8 +7,11 @@ use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\PersediaanObat;
 use App\Http\Controllers\Admin\ProductStockController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\ReportPembelianController;
+use App\Http\Controllers\Admin\ReportStokController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SatuanController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
@@ -79,7 +82,32 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
             'permissions' => 'kadaluarsa.index|kadaluarsa.create|kadaluarsa.edit|kadaluarsa.delete',
             'name' => 'kadaluarsa'
         ],
+
+        'suppliers' => [
+            'controller' => SupplierController::class,
+            'permissions' => 'suppliers.index|suppliers.create|suppliers.edit|suppliers.delete'
+        ],
+        'report_pembelian' => [
+            'controller' => ReportPembelianController::class,
+            'permissions' => 'report_pembelian.index',
+            'name' => 'report_pembelian'
+        ],
+
+        'report_stok' => [
+            'controller' => ReportStokController::class,
+            'permissions' => 'report_stok.index',
+            'name' => 'report_stok'
+        ],
+
+        'report_kadaluarsa' => [
+            'controller' => ReportController::class,
+            'permissions' => 'report_kadaluarsa.index',
+            'name' => 'report_kadaluarsa'
+        ],
+        
     ];
+
+        Route::get('/get-cities/{provinceId}', [\App\Http\Controllers\Admin\SupplierController::class, 'getCitiesByProvince'])->name('get-cities');
 
     foreach ($resources as $name => $resource) {
         $route = Route::resource($name, $resource['controller'])
@@ -97,8 +125,8 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
         Route::post('/get-snap-token', [TransaksiController::class, 'getSnapToken'])->name('get-snap-token');
     });
 
-     Route::prefix('report')->name('report.')->middleware('permission:laporan.index')->group(function () {
-        Route::get('/', [ReportController::class, 'index'])->name('index');
-        Route::get('/generate', [ReportController::class, 'generate'])->name('generate');
-    });
+    //  Route::prefix('report')->name('report.')->middleware('permission:laporan.index')->group(function () {
+    //     Route::get('/', [ReportController::class, 'index'])->name('index');
+    //     Route::get('/generate', [ReportController::class, 'generate'])->name('generate');
+    // });
 });

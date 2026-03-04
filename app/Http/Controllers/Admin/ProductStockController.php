@@ -7,6 +7,7 @@ use App\Http\Requests\ProductStockRequest;
 use App\Models\medicines;
 use App\Models\StockProduct;
 use App\Models\StockTotal;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,14 +16,17 @@ class ProductStockController extends Controller
     public function index()
     {
         // Ambil data StockProduct beserta relasi product.
-        $productStocks = StockProduct::with(['medicines'])
+        $productStocks = StockProduct::with(['medicines', 'supplier'])
             ->when(request()->q, function ($query) {
-                $query->whereHas('medicine', function ($q) {
+                $query->whereHas('supplier', function ($q) {
                     $q->where('name', 'like', '%' . request()->q . '%');
                 });
             })
             ->latest()
             ->paginate(5);
+
+        // Ambil semua supplier untuk dropdown jika diperlukan
+        $suppliers = Supplier::all();
 
         // Sertakan parameter pencarian 'q' di link paginasi
         $productStocks->appends(['q' => request()->q]);
@@ -30,17 +34,20 @@ class ProductStockController extends Controller
         // Kembalikan data ke komponen Inertia 'Admin/ProductStocks/Index'
         return inertia('Admin/ProductStocks/Index', [
             'productStocks' => $productStocks,
+            'suppliers' => $suppliers
         ]);
     }
 
     public function create()
     {
         // Ambil semua produk (beserta stok total).
-        $products = medicines::with('stockTotal')->get();
+        $products = medicines::with(['kategori', 'satuan'])->get();
+        $suppliers = Supplier::all();
 
         // Kembalikan ke Inertia 'Admin/ProductStocks/Create' dengan data produk
         return inertia('Admin/ProductStocks/Create', [
             'products' => $products,
+            'suppliers' => $suppliers
         ]);
     }
 
@@ -48,7 +55,6 @@ class ProductStockController extends Controller
     {
         // Mulai transaksi database
         DB::beginTransaction();
-
         try {
             // Buat record StockProduct baru berdasarkan data yang divalidasi
             $stockProduct = StockProduct::create($request->validated());

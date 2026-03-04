@@ -21,4 +21,8 @@ class medicines extends Model
     {
         return $this->hasOne(StockTotal::class);
     }
+
+    public function stockProduct(){
+        return $this->hasOne(StockProduct::class);
+    }
 }

@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('stock_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('medicines_id')->constrained()->onDelete('cascade');
+            $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('set null');
             $table->integer('stock_quantity')->default(0);
+            $table->string('nomor_batch');
+            $table->bigInteger('harga_beli');
+            $table->date(column: 'kadaluarsa');
+            $table->date(column: 'received_at');
             $table->timestamps();
         });
     }

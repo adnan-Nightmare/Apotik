@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\customer;
 use App\Models\medicines;
+use App\Models\StockProduct;
 use App\Models\StockTotal;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
@@ -61,6 +62,8 @@ class DashboardController extends Controller
         // Ambil semua data obat
         $obat = medicines::all();
 
+        $stockProduct = StockProduct::all();
+
         // Total stok per kategori
         $stockTotals = StockTotal::with('medicines.kategori')->get();
         $groupedByCategory = $stockTotals->groupBy(fn($item) => optional($item->medicines->kategori)->nama_kategori);
@@ -68,6 +71,14 @@ class DashboardController extends Controller
             'category'    => $cat,
             'total_stock' => $items->sum('total_stock'),
             ])->values();
+
+        // notif stock hampir habis dan habis
+        $stockHabis = StockTotal::where('total_stock', 0)->get();
+        $stockHampirHabis = StockTotal::where('total_stock', '>', 0)->where('total_stock', '<=', 20)->get();
+
+        // notif hampir kadaluarsa dan kadaluarsa
+        $sudahKadaluarsa = StockProduct::whereDate('kadaluarsa', '<=', Carbon::today())->get();
+        $hampirKadaluarsa = StockProduct::whereDate('kadaluarsa', '>', Carbon::today())->whereDate('kadaluarsa', '<=', Carbon::today()->addDays(30))->get();
 
         // Kirim data ke Inertia
         return Inertia::render('Admin/Dashboard/Index', [
@@ -77,11 +88,38 @@ class DashboardController extends Controller
                 'totalTransactions' => $totalTransactions,
                 'totalSales'        => $totalSales,
             ],
+            'stockProduct' => $stockProduct,
             'transactionData' => $transactionData,
             'salesData'       => $salesData,
             'productsData'    => $productsData,
             'obats'    => $obat,
-            'categoryData' => $categoryData
+            'categoryData' => $categoryData,
+            'notifs' => [
+                [
+                    'type' => 'warning',
+                    'title' => 'Stok Hampir Habis!',
+                    'message' => $stockHampirHabis->count() . ' inventori',
+                    'data' => $stockHampirHabis
+                ],
+                [
+                    'type' => 'error',
+                    'title' => 'Stok Habis!',
+                    'message' => $stockHabis->count() . ' inventori',
+                    'data' => $stockHabis
+                ],
+                [
+                    'type' => 'warning',
+                    'title' => 'Segera Kadaluarsa!',
+                    'message' => $hampirKadaluarsa->count() . ' batch',
+                    'data' => $hampirKadaluarsa
+                ],
+                [
+                    'type' => 'error',
+                    'title' => 'Sudah Kadaluarsa!',
+                    'message' => $sudahKadaluarsa->count() . ' batch',
+                    'data' => $sudahKadaluarsa
+                ],
+            ]
         ]);
     }
 }

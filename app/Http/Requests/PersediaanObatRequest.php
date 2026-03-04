@@ -29,11 +29,9 @@ class PersediaanObatRequest extends FormRequest
                 'max:2048',
             ],
             "nama_obat" => 'required|string|max:255',
-            'nomor_batch' => 'required|string|max:255',
             'kategori_id' => 'required|exists:kategoris,id',
             'satuan_id' => 'required|exists:satuans,id',
-            'harga' => 'required',
-            'kadaluarsa' => 'required',
+            'harga_jual' => 'required|numeric|min:0',
         ];
     }
 }

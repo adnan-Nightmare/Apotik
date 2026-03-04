@@ -12,10 +12,8 @@ const ObatEdit = () => {
         nama_obat: obat.nama_obat,
         kategori_id: obat.kategori_id,
         satuan_id: obat.satuan_id,
-        harga: obat.harga,
+        harga_jual: obat.harga_jual,
         gambar_obat: null,
-        kadaluarsa: obat.kadaluarsa,
-        nomor_batch: obat.nomor_batch,
     });
 
     const handleChange = (e) => {
@@ -33,12 +31,10 @@ const ObatEdit = () => {
 
         const formData = new FormData();
         formData.append("nama_obat", data.nama_obat);
-        formData.append("harga", data.harga);
         formData.append("kategori_id", data.kategori_id);
         formData.append("satuan_id", data.satuan_id);
+        formData.append("harga_jual", data.harga_jual);
         formData.append("stok", data.stok);
-        formData.append("nomor_batch", data.nomor_batch);
-        formData.append("kadaluarsa", data.kadaluarsa);
         if (data.gambar_obat) {
             formData.append("gambar_obat", data.gambar_obat);
         }
@@ -83,7 +79,7 @@ const ObatEdit = () => {
 
                 <form onSubmit={updateObat}>
                     <div className="row g-4">
-                        <div className="mb-3 col-md-7">
+                        <div className="mb-3">
                             <label for="namaObat" className="form-label">
                                 Nama Obat<span className="text-danger">*</span>
                             </label>
@@ -102,37 +98,10 @@ const ObatEdit = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="mb-3 col-md-5">
-                            <label for="Satuan" className="form-label">
-                                Satuan<span className="text-danger">*</span>
-                            </label>
-                            <select
-                                class="form-select"
-                                aria-label="Default select example"
-                                id="Satuan"
-                                value={data.satuan_id}
-                                onChange={(e) =>
-                                    setData("satuan_id", e.target.value)
-                                }
-                            >
-                                <option value="" selected disabled>
-                                    Pilih satuan obat
-                                </option>
-                                {satuan.map((satuan) => (
-                                    <option key={satuan} value={satuan.id}>
-                                        {satuan.nama_satuan}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.satuan_id && (
-                                <div className="invalid-feedback d-block">
-                                    {errors.satuan_id}
-                                </div>
-                            )}
-                        </div>
+                        
                     </div>
                     <div className="row g-4">
-                        <div className="col-md-4">
+                        <div className="col-md-6">
                             <label for="kelasObat" className="form-label">
                                 Kategori obat
                                 <span className="text-danger">*</span>
@@ -164,51 +133,39 @@ const ObatEdit = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="col-md-4">
-                            <label for="nomorBatch" className="form-label">
-                                Nomor batch
-                                <span className="text-danger">*</span>
+                        <div className="mb-3 col-md-6">
+                            <label for="Satuan" className="form-label">
+                                Satuan<span className="text-danger">*</span>
                             </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="nomorBatch"
-                                value={data.nomor_batch}
+                            <select
+                                class="form-select"
+                                aria-label="Default select example"
+                                id="Satuan"
+                                value={data.satuan_id}
                                 onChange={(e) =>
-                                    setData("nomor_batch", e.target.value)
+                                    setData("satuan_id", e.target.value)
                                 }
-                            />
-                            {errors.nomor_batch && (
+                            >
+                                <option value="" selected disabled>
+                                    Pilih satuan obat
+                                </option>
+                                {satuan.map((satuan) => (
+                                    <option key={satuan} value={satuan.id}>
+                                        {satuan.nama_satuan}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.satuan_id && (
                                 <div className="invalid-feedback d-block">
-                                    {errors.nomor_batch}
-                                </div>
-                            )}
-                        </div>
-                        <div className="col-md-4">
-                            <label for="kadaluarsa" className="form-label">
-                                Tanggal kadaluarsa
-                                <span className="text-danger">*</span>
-                            </label>
-                            <input
-                                type="date"
-                                className="form-control"
-                                id="kadaluarsa"
-                                value={data.kadaluarsa}
-                                onChange={(e) =>
-                                    setData("kadaluarsa", e.target.value)
-                                }
-                            />
-                            {errors.kadaluarsa && (
-                                <div className="invalid-feedback d-block">
-                                    {errors.kadaluarsa}
+                                    {errors.satuan_id}
                                 </div>
                             )}
                         </div>
                     </div>
-                    <div className="row g-4 mt-1">
-                        <div className="col-md-5">
+                    <div className="row">
+                              <div className="col-md-6">
                             <label for="harga" className="form-label">
-                                Harga<span className="text-danger">*</span>
+                                Harga Jual<span className="text-danger">*</span>
                             </label>
                             <div class="input-group mb-3">
                                 <span
@@ -224,20 +181,20 @@ const ObatEdit = () => {
                                     aria-describedby="inputGroup-sizing-default"
                                     defaultValue="0"
                                     min="0"
-                                    id="harga"
-                                    value={data.harga}
+                                    id="hargaJual"
+                                    value={data.harga_jual}
                                     onChange={(e) =>
-                                        setData("harga", e.target.value)
+                                        setData("harga_jual", e.target.value)
                                     }
                                 />
                             </div>
-                            {errors.harga && (
+                            {errors.harga_jual && (
                                 <div className="invalid-feedback d-block">
-                                    {errors.harga}
+                                    {errors.harga_jual}
                                 </div>
                             )}
                         </div>
-                        <div class="col-md-7">
+                        <div class="col-md-6">
                             <label for="formFile" className="form-label">
                                 Gambar obat
                                 <span className="text-danger">*</span>
@@ -255,7 +212,6 @@ const ObatEdit = () => {
                             )}
                         </div>
                     </div>
-
                     <div className="mt-1 mb-3">
                         {preview && (
                             <img

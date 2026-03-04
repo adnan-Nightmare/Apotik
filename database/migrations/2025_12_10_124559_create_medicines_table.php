@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('gambar_obat')->nullable();
             $table->string('nama_obat');
-            $table->string('nomor_batch');
             $table->unsignedBigInteger('kategori_id');
             $table->unsignedBigInteger('satuan_id');
-            $table->bigInteger('harga');
-            $table->date(column: 'kadaluarsa');
+            $table->bigInteger('harga_jual');
             $table->timestamps();
 
             $table->foreign('kategori_id')->references('id')->on('kategoris')->onUpdate('cascade')->onDelete('cascade');

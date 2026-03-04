@@ -46,7 +46,9 @@ class KategoriController extends Controller
         kategori::create($request->validated());
 
         // Arahkan kembali ke halaman kategori
-        return redirect()->route('admin.kategori.index');
+        return redirect()->route('admin.kategori.index')->with([
+            'success' => 'Kategori berhasil ditambahkan'
+        ]);
     }
 
     /**

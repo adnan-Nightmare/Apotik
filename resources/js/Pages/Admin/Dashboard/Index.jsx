@@ -102,12 +102,13 @@ const STAT_PERMISSION_MAP = {
 const Index = () => {
     const {
         stats,
-        transactionData,
+        stockProduct,
         salesData,
         productsData,
         obats,
         categoryData,
     } = usePage().props;
+    
 
     // tempat menghitung item / obat yg kadaluarsa
     const statusKadaluarsaItems = useMemo(() => {
@@ -124,7 +125,7 @@ const Index = () => {
             return diffDays;
         };
 
-        obats.forEach((medicine) => {
+        stockProduct.forEach((medicine) => {
             const sisaHari = calculateRemainingDays(medicine.kadaluarsa);
             const isKadaluarsa = sisaHari <= 0;
             const isHampir = sisaHari >= 0 && sisaHari <= 30;
@@ -189,13 +190,13 @@ const Index = () => {
                         })}
                     </div>
 
-                    {/* Pesan jika data transaksi kosong */}
+                    {/* Pesan jika data transaksi kosong
                     {isEmpty(transactionData) && (
                         <div className="alert alert-warning my-4">
                             Data transaksi kosong. Tambahkan data terlebih
                             dahulu.
                         </div>
-                    )}
+                    )} */}
 
                     {/* charts */}
                     <div className="row g-4 my-4">

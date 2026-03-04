@@ -92,12 +92,15 @@ class TransaksiController extends Controller
         $userId = Auth::id();
         $customerId = $validatedData['customer_id'] ?? null;
 
+        // dd($customerId, $validatedData['customer_id']);
+
 
         if (!$userId) {
             return redirect()->route('login');
         }
 
-        $productStock = StockTotal::where('id', $validatedData['medicines_id'])->value('total_stock');
+        $productStock = StockTotal::where('medicines_id', $validatedData['medicines_id'])->value('total_stock');
+        // dd($productStock);
         if ($productStock === 0) {
             return redirect()->back()->withErrors(['quantity' => 'Stok produk masih 0.']);
         }
@@ -107,6 +110,7 @@ class TransaksiController extends Controller
             ->sum('quantity');
         $newQuantity = $cartQuantity + $validatedData['quantity'];
 
+        // dd($newQuantity, $productStock);
 
         if ($newQuantity > $productStock) {
             return redirect()->back()->withErrors(['quantity' => 'Kuantitas melebihi stok yang tersedia. Stok saat ini: ' . $productStock]);

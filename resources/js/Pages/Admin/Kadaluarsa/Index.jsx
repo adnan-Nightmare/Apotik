@@ -3,12 +3,24 @@ import AdminLayout from "../../../Layouts/AdminLayout";
 import { Link, usePage } from "@inertiajs/react";
 import StatusBadge from "../../../Components/StatusBadget";
 import hasAnyPermission from "../../../utils/hasAnyPermission";
+import Pagination from "../../../Components/Pagination";
+
+const btnMushnah = (kadaluarsa, hampir) => {
+    if (kadaluarsa || hampir) {
+        return hasAnyPermission(["kadaluarsa.delete"]) && (
+            <button
+                className="btn btn-outline-danger btn-sm rounded"
+                onClick={() => handleDelete(kadaluarsa.id)}
+            >
+                <i className="bi bi-trash-fill"></i> Musnahkan
+            </button>
+        );
+    }
+};
 
 const Index = () => {
     const { obats, status, today, threshold } = usePage().props;
     const [filterText, setFilterText] = useState("");
-
-    console.log(obats);
 
     const calculateRemainingDays = (expDate) => {
         const exp = new Date(expDate);
@@ -17,8 +29,6 @@ const Index = () => {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         return diffDays;
     };
-
-    console.log(obats);
 
     return (
         <AdminLayout>
@@ -64,6 +74,7 @@ const Index = () => {
                                                 <th>Stok</th>
                                                 <th>Kadaluarsa</th>
                                                 <th>Status</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -90,9 +101,9 @@ const Index = () => {
                                                                 </td>
                                                                 <td>
                                                                     <img
-                                                                        src={`/storage/obats/${obat.gambar_obat}`}
+                                                                        src={`/storage/obats/${obat.medicines.gambar_obat}`}
                                                                         alt={
-                                                                            obat.gambar_obat
+                                                                            obat.medicines.gambar_obat
                                                                         }
                                                                         width="50"
                                                                         height="50"
@@ -103,7 +114,7 @@ const Index = () => {
                                                                     />
                                                                 </td>
                                                                 <td>
-                                                                    {obat.nama_obat ||
+                                                                    {obat.medicines.nama_obat ||
                                                                         "Nama tidak tersedia"}
                                                                 </td>
                                                                 <td>
@@ -112,11 +123,7 @@ const Index = () => {
                                                                 </td>
 
                                                                 <td>
-                                                                    {obat.stock_total
-                                                                        ? obat
-                                                                              .stock_total
-                                                                              .total_stock
-                                                                        : 0}
+                                                                    {obat.stock_quantity || 0}
                                                                 </td>
                                                                 <td>
                                                                     {obat.kadaluarsa ||
@@ -135,6 +142,12 @@ const Index = () => {
                                                                         }
                                                                     />
                                                                 </td>
+                                                                <td>
+                                                                    {btnMushnah(
+                                                                        isKadaluarsa,
+                                                                        isHampir,
+                                                                    )}
+                                                                </td>
                                                             </tr>
                                                         );
                                                     },
@@ -145,7 +158,7 @@ const Index = () => {
                                                         className="text-center"
                                                         colSpan="10"
                                                     >
-                                                        Tidak ada obat obat
+                                                        Tidak ada obat kadaluarsa
                                                         ditemukan
                                                     </td>
                                                 </tr>
@@ -153,7 +166,7 @@ const Index = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                                {/* <Pagination links={obats.links} /> */}
+                                <Pagination links={obats.links} />
                             </div>
                         </div>
                     </div>

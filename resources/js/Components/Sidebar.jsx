@@ -7,7 +7,7 @@ const Sidebar = () => {
     return (
         <nav
             className="bg-white d-flex flex-column p-3 vh-100 border-end"
-            style={{ width: "330px" }}
+            style={{ width: "330px", 'overflow': "scroll" }} //'overflow': "scroll"
         >
             <div className="p-2 ">
                 <h1 className="h5 text-uppercase fw-bold mb-3 link-body-emphasis">
@@ -27,6 +27,14 @@ const Sidebar = () => {
 
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item mt-3 mb-1 text-muted">Inventory</li>
+
+                    {hasAnyPermission(["suppliers.index"]) && (
+                        <NavItem
+                            href="/admin/suppliers"
+                            icon="bi-truck"
+                            label="Suppliers"
+                        />
+                    )}
 
                     {hasAnyPermission(["kategori.index"]) && (
                         <NavItem
@@ -50,14 +58,6 @@ const Sidebar = () => {
                             icon="bi-box-seam"
                         />
                     )}
-
-                    {hasAnyPermission(["stock.index"]) && (
-                        <NavItem
-                            href="/admin/stock"
-                            label="Stok Obat"
-                            icon="bi-archive"
-                        />
-                    )}
                 </ul>
 
                 <ul className="nav nav-pills flex-column mb-auto">
@@ -70,28 +70,37 @@ const Sidebar = () => {
                         />
                     )}
 
-                    {hasAnyPermission(["laporan.index"]) && (
+                    {hasAnyPermission(["report_pembelian.index"]) && (
                         <NavItem
-                            href="/admin/report"
-                            label="Laporan"
+                            href="/admin/report_pembelian"
+                            label="Laporan Pembelian"
+                            icon="bi-graph-up"
+                        />
+                    )}
+
+                    {hasAnyPermission(["report_stok.index"]) && (
+                        <NavItem
+                            href="/admin/report_stok"
+                            label="Laporan Stok"
+                            icon="bi-graph-up"
+                        />
+                    )}
+
+                    {hasAnyPermission(["report_kadaluarsa.index"]) && (
+                        <NavItem
+                            href="/admin/report_kadaluarsa"
+                            label="Laporan Kadaluarsa"
                             icon="bi-graph-up"
                         />
                     )}
                 </ul>
                 <ul className="nav nav-pills flex-column mb-auto">
-                    <li className="nav-item mt-3 mb-1 text-muted">Penjualan</li>
-                    {hasAnyPermission(["transaksi.index"]) && (
+                    <li className="nav-item mt-3 mb-1 text-muted">Pembelian</li>
+                      {hasAnyPermission(["stock.index"]) && (
                         <NavItem
-                            href="/admin/transaksi"
-                            label="Transaksi"
-                            icon="bi-basket"
-                        />
-                    )}
-                    {hasAnyPermission(["customers.index"]) && (
-                        <NavItem
-                            href="/admin/customers"
-                            label="Pelanggan"
-                            icon="bi-people"
+                            href="/admin/stock"
+                            label="Pembelian obat"
+                            icon="bi-archive"
                         />
                     )}
                 </ul>

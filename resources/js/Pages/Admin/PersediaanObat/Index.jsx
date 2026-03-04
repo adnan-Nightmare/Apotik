@@ -11,10 +11,8 @@ const Index = () => {
     const { obats } = usePage().props;
     const [filterText, setFilterText] = useState("");
 
-    const filteredObats = obats.data.filter(
-        (obat) =>
-            obat.nama_obat.toLowerCase().includes(filterText.toLowerCase()) ||
-            obat.nomor_batch.toLowerCase().includes(filterText.toLowerCase()),
+    const filteredObats = obats.data.filter((obat) =>
+        obat.nama_obat.toLowerCase().includes(filterText.toLowerCase()),
     );
 
     const calculateRemainingDays = (expDate) => {
@@ -114,13 +112,10 @@ const Index = () => {
                                                 </th>
                                                 <th>Gambar</th>
                                                 <th>Nama obat</th>
-                                                <th>Nomor batch</th>
                                                 <th>Kategori</th>
                                                 <th>Satuan</th>
                                                 <th>Stok</th>
-                                                <th>Harga</th>
-                                                <th>kadaluarsa</th>
-                                                <th>Status</th>
+                                                <th>Harga Jual</th>
                                                 <th className="text-center">
                                                     Actions
                                                 </th>
@@ -167,10 +162,6 @@ const Index = () => {
                                                                         "Nama tidak tersedia"}
                                                                 </td>
                                                                 <td>
-                                                                    {obat.nomor_batch ||
-                                                                        "Nomor batch tidak tersedia"}
-                                                                </td>
-                                                                <td>
                                                                     {obat
                                                                         .kategori
                                                                         .nama_kategori ||
@@ -189,26 +180,11 @@ const Index = () => {
                                                                         : 0}
                                                                 </td>
                                                                 <td>
-                                                                    {formatRupiah(
-                                                                        obat.harga,
-                                                                    )}
-                                                                </td>
-                                                                <td>
-                                                                    {obat.kadaluarsa ||
-                                                                        "Gambar tidak ada"}
-                                                                </td>
-                                                                <td>
-                                                                    <StatusBadge
-                                                                        isKadaluarsa={
-                                                                            isKadaluarsa
-                                                                        }
-                                                                        isHampir={
-                                                                            isHampir
-                                                                        }
-                                                                        sisaHari={
-                                                                            sisaHari
-                                                                        }
-                                                                    />
+                                                                    {obat.harga_jual
+                                                                        ? formatRupiah(
+                                                                              obat.harga_jual,
+                                                                          )
+                                                                        : "0"}
                                                                 </td>
                                                                 <td className="text-center">
                                                                     {hasAnyPermission(
