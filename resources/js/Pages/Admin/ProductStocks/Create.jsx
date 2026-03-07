@@ -19,8 +19,6 @@ const productStockCreate = () => {
         received_at: "",
     });
 
-    console.log(data);
-
     useEffect(() => {
         if (products.length > 0) {
             setIsLoading(false);

@@ -6,18 +6,16 @@ import hasAnyPermission from "../../../utils/hasAnyPermission";
 import Pagination from "../../../Components/Pagination";
 
 const Index = () => {
-    const { laporanStok } = usePage().props;
+    const { supplierReport } = usePage().props;
     const [filterText, setFilterText] = useState("");
-    const filteredProducts = laporanStok.data.filter(
-        (product) =>
-            console.log(product) ||
-            product.nama_obat.toLowerCase().includes(filterText.toLowerCase()),
+    const filteredSupplier = supplierReport.data.filter((supplier) =>
+        supplier.supplier.name.toLowerCase().includes(filterText.toLowerCase()),
     );
 
     return (
         <AdminLayout>
             <div className="container-fluid">
-                <h3>Laporan Stok Obat</h3>
+                <h3>Laporan Supplier</h3>
 
                 <div className="row mt-3">
                     <div className="col-12">
@@ -35,7 +33,7 @@ const Index = () => {
                                     />
 
                                 <a
-                                    href="/admin/export-stok"
+                                    href="/admin/export-supplier"
                                     className="btn btn-sm btn-primary mx-3"
                                 >
                                     Export Excel
@@ -48,60 +46,36 @@ const Index = () => {
                                                 <th className="text-center">
                                                     No.
                                                 </th>
-                                                <th>Gambar</th>
-                                                <th>Nama Obat</th>
-                                                <th>Kategori</th>
-                                                <th>Satuan</th>
-                                                <th>Stok</th>
+                                                <th>Nama Supplier</th>
+                                                <th>Jumlah Pembelian</th>
+                                                <th>Total Obat</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {filteredProducts.length > 0 ? (
-                                                filteredProducts.map(
-                                                    (product, index) => (
-                                                        <tr key={product.id}>
+                                            {filteredSupplier.length > 0 ? (
+                                                filteredSupplier.map(
+                                                    (supplier, index) => (
+                                                        <tr key={supplier.id}>
                                                             <td className="text-center">
                                                                 {index +
                                                                     1 +
-                                                                    (laporanStok.current_page -
+                                                                    (supplierReport.current_page -
                                                                         1) *
-                                                                        laporanStok.per_page}
+                                                                        supplierReport.per_page}
                                                             </td>
                                                             <td>
-                                                                <img
-                                                                    src={`/storage/obats/${product.gambar_obat}`}
-                                                                    alt={
-                                                                        product.gambar_obat
-                                                                    }
-                                                                    width="50"
-                                                                    height="50"
-                                                                    style={{
-                                                                        objectFit:
-                                                                            "contain",
-                                                                    }}
-                                                                />
-                                                            </td>
-                                                            <td>
-                                                                {product.nama_obat ||
+                                                                {supplier
+                                                                    .supplier
+                                                                    .name ||
                                                                     "Nama tidak tersedia"}
                                                             </td>
                                                             <td>
-                                                                {product
-                                                                    .kategori
-                                                                    .nama_kategori ||
-                                                                    "Kategori tidak tersedia"}
+                                                                {supplier.jumlah_pembelian ||
+                                                                    0}
                                                             </td>
                                                             <td>
-                                                                {product.satuan
-                                                                    .nama_satuan ||
-                                                                    "Satuan tidak tersedia"}
-                                                            </td>
-                                                            <td>
-                                                                {product.stock_total
-                                                                    ? product
-                                                                          .stock_total
-                                                                          .total_stock
-                                                                    : 0}
+                                                                {supplier.total_obat ||
+                                                                    0}
                                                             </td>
                                                         </tr>
                                                     ),
@@ -120,7 +94,7 @@ const Index = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                                <Pagination links={laporanStok.links} />
+                                <Pagination links={supplierReport.links} />
                             </div>
                         </div>
                     </div>

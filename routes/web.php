@@ -1,5 +1,7 @@
 <?php
 
+use App\Exports\StockReportExport;
+use App\Exports\SupplierReportExport;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KadaluarsaController;
@@ -9,6 +11,7 @@ use App\Http\Controllers\Admin\ProductStockController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReportPembelianController;
 use App\Http\Controllers\Admin\ReportStokController;
+use App\Http\Controllers\Admin\ReportSupplierController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SatuanController;
 use App\Http\Controllers\Admin\SupplierController;
@@ -18,6 +21,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\logoutController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', function () {
     // Cek jika pengguna sudah login
@@ -39,6 +43,18 @@ Route::post('/logout', logoutController::class);
 
 Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard')->middleware('permission:dashboard.index');
+
+    Route::get('/export-supplier', function () {
+        return Excel::download(new SupplierReportExport, 'laporan_supplier.xlsx');
+    });
+
+    Route::get('/export-stok', function () {
+        return Excel::download(new StockReportExport, 'laporan_stok.xlsx');
+    });
+
+        Route::get('/export-pembelian', function () {
+        return Excel::download(new SupplierReportExport, 'laporan_supplier.xlsx');
+    });
 
     $resources = [
         'roles' => [
@@ -79,7 +95,7 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
 
         'kadaluarsa' => [
             'controller' => KadaluarsaController::class,
-            'permissions' => 'kadaluarsa.index|kadaluarsa.create|kadaluarsa.edit|kadaluarsa.delete',
+            'permissions' => 'kadaluarsa.index|kadaluarsa.musnah|kadaluarsa.edit|kadaluarsa.delete',
             'name' => 'kadaluarsa'
         ],
 
@@ -87,22 +103,16 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
             'controller' => SupplierController::class,
             'permissions' => 'suppliers.index|suppliers.create|suppliers.edit|suppliers.delete'
         ],
-        'report_pembelian' => [
-            'controller' => ReportPembelianController::class,
-            'permissions' => 'report_pembelian.index',
-            'name' => 'report_pembelian'
-        ],
 
         'report_stok' => [
             'controller' => ReportStokController::class,
             'permissions' => 'report_stok.index',
             'name' => 'report_stok'
         ],
-
-        'report_kadaluarsa' => [
-            'controller' => ReportController::class,
-            'permissions' => 'report_kadaluarsa.index',
-            'name' => 'report_kadaluarsa'
+         'report_supplier' => [
+            'controller' => ReportSupplierController::class,
+            'permissions' => 'report_supplier.index',
+            'name' => 'report_supplier'
         ],
         
     ];
@@ -125,8 +135,13 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
         Route::post('/get-snap-token', [TransaksiController::class, 'getSnapToken'])->name('get-snap-token');
     });
 
-    //  Route::prefix('report')->name('report.')->middleware('permission:laporan.index')->group(function () {
-    //     Route::get('/', [ReportController::class, 'index'])->name('index');
-    //     Route::get('/generate', [ReportController::class, 'generate'])->name('generate');
-    // });
+     Route::prefix('report_kadaluarsa')->name('report.')->middleware('permission:report_kadaluarsa.index')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('/generate', [ReportController::class, 'generate'])->name('generate');
+    });
+
+    Route::prefix('report_pembelian')->name('report.')->middleware('permission:report_pembelian.index')->group(function () {
+        Route::get('/', [ReportPembelianController::class, 'index'])->name('index');
+        Route::get('/generate', [ReportPembelianController::class, 'generate'])->name('generate');
+    });
 });

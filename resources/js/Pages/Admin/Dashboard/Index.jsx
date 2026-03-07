@@ -39,17 +39,15 @@ const COLORS = [
 
 const TITLES = {
     totalObat: "Total Obat",
-    totalSales: "Total Penjualan",
-    totalTransactions: "Total Transaksi",
-    totalCustomers: "Total Customer",
+    totalTransactions: "Total Stok Keseluruhan",
+    totalCustomers: "Total Supplier",
     totalProducts: "Total Produk di Stok",
     totalSuppliers: "Total Supplier Aktif",
 };
 
 const ICONS = {
     totalObat: "bi bi-box-seam",
-    totalCustomers: "bi bi-people-fill",
-    totalSales: "bi bi-cash-stack",
+    totalCustomers: "bi bi-truck",
     totalTransactions: "bi bi-receipt",
     totalProducts: "bi bi-box-seam",
     totalSuppliers: "bi bi-truck",
@@ -60,8 +58,8 @@ const isEmpty = (data) =>
     (Array.isArray(data) ? data.length === 0 : Object.keys(data).length === 0);
 
 const StatCard = ({ color, icon, title, value }) => (
-    <div className="col-12 col-sm-6 col-md-3 mb-3">
-        <div className="card shadow-sm h-100 ">
+    <div className="col-12 col-sm-6 col-md-4 mb-3">
+        <div className="card shadow-sm" style={{ height: "100px" }}>
             <div className="card-body p-3 d-flex align-items-center">
                 <div
                     className="flex-shrink-0 me-3 rounded d-flex align-items-center justify-content-center"
@@ -92,7 +90,6 @@ const ChartCard = ({ title, children, emptyMessage }) => (
 // Mapping antara statistik dan permission
 const STAT_PERMISSION_MAP = {
     totalObat: "dashboard.view_persediaan_obat",
-    totalSales: "dashboard.view_sales",
     totalTransactions: "dashboard.view_transactions",
     totalCustomers: "dashboard.view_customers",
     totalProducts: "dashboard.view_products",
@@ -162,7 +159,7 @@ const Index = () => {
 
     return (
         <>
-            <AdminLayout scroll={true}>
+            <AdminLayout>
                 <div className="container-fluid">
                     <h1 className="mb-4 h3">Dashboard</h1>
                     <div className="row g-3">
@@ -242,79 +239,6 @@ const Index = () => {
                                                     <Tooltip />
                                                 </Pie>
                                             </PieChart>
-                                        </ResponsiveContainer>
-                                    )}
-                                </ChartCard>
-                            </div>
-                        )}
-
-                        {/* Chart Line : Penjualan dari Waktu ke Waktu */}
-                        {hasAnyPermission(["dashboard.view_sales"]) && (
-                            <div className="col-md-6">
-                                <ChartCard
-                                    title="Penjualan dari Waktu ke Waktu"
-                                    emptyMessage="Data penjualan tidak tersedia"
-                                >
-                                    {!isEmpty(salesData) && (
-                                        <ResponsiveContainer
-                                            width="100%"
-                                            height={300}
-                                        >
-                                            <LineChart data={salesData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="date" />
-                                                <YAxis
-                                                    tickFormatter={(value) =>
-                                                        formatRupiah(value)
-                                                    }
-                                                />
-
-                                                <Tooltip
-                                                    formatter={(value) =>
-                                                        formatRupiah(value)
-                                                    }
-                                                />
-
-                                                <Line
-                                                    type="monotone"
-                                                    dataKey="total"
-                                                    stroke="#8884d8"
-                                                    activeDot={{ r: 8 }}
-                                                />
-                                            </LineChart>
-                                        </ResponsiveContainer>
-                                    )}
-                                </ChartCard>
-                            </div>
-                        )}
-                    </div>
-
-                    <div
-                        className="row g-4 mt-4"
-                        style={{ marginBottom: "100px" }}
-                    >
-                        {/* Chart Bar: Obat Terlaris */}
-                        {hasAnyPermission(["dashboard.view_products"]) && (
-                            <div className="col-md-6">
-                                <ChartCard
-                                    title="Obat Terlaris"
-                                    emptyMessage="Data Obat terlaris tidak tersedia"
-                                >
-                                    {!isEmpty(productsData) && (
-                                        <ResponsiveContainer
-                                            width="100%"
-                                            height={300}
-                                        >
-                                            <BarChart data={productsData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="name" />
-                                                <YAxis />
-                                                <Tooltip />
-                                                <Bar
-                                                    dataKey="total_quantity"
-                                                    fill="#FF8042"
-                                                />
-                                            </BarChart>
                                         </ResponsiveContainer>
                                     )}
                                 </ChartCard>

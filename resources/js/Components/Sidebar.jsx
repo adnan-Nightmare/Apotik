@@ -7,7 +7,7 @@ const Sidebar = () => {
     return (
         <nav
             className="bg-white d-flex flex-column p-3 vh-100 border-end"
-            style={{ width: "330px", 'overflow': "scroll" }} //'overflow': "scroll"
+            style={{ width: "330px", overflow: "scroll" }} //'overflow': "scroll"
         >
             <div className="p-2 ">
                 <h1 className="h5 text-uppercase fw-bold mb-3 link-body-emphasis">
@@ -93,10 +93,18 @@ const Sidebar = () => {
                             icon="bi-graph-up"
                         />
                     )}
+
+                    {hasAnyPermission(["report_supplier.index"]) && (
+                        <NavItem
+                            href="/admin/report_supplier"
+                            label="Laporan Suppliers"
+                            icon="bi-graph-up"
+                        />
+                    )}
                 </ul>
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item mt-3 mb-1 text-muted">Pembelian</li>
-                      {hasAnyPermission(["stock.index"]) && (
+                    {hasAnyPermission(["stock.index"]) && (
                         <NavItem
                             href="/admin/stock"
                             label="Pembelian obat"

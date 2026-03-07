@@ -117,7 +117,7 @@ const Login = ({ nama_app }) => {
                                 </button>
                             </form>
 
-                            <p className="text-center mt-2">alamat contoh</p>
+                            <p className="text-center mt-2">Simpang Rumbio, Kota Solok</p>
                         </div>
                     </div>
                 </div>

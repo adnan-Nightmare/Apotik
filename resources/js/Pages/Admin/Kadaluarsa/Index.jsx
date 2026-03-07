@@ -1,22 +1,58 @@
 import React, { useState } from "react";
 import AdminLayout from "../../../Layouts/AdminLayout";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import StatusBadge from "../../../Components/StatusBadget";
 import hasAnyPermission from "../../../utils/hasAnyPermission";
 import Pagination from "../../../Components/Pagination";
+import Swal from "sweetalert2";
 
-const btnMushnah = (kadaluarsa, hampir) => {
-    if (kadaluarsa || hampir) {
-        return hasAnyPermission(["kadaluarsa.delete"]) && (
-            <button
-                className="btn btn-outline-danger btn-sm rounded"
-                onClick={() => handleDelete(kadaluarsa.id)}
-            >
-                <i className="bi bi-trash-fill"></i> Musnahkan
-            </button>
-        );
-    }
-};
+// const btnMushnah = (kadaluarsa, hampir, id) => {
+//     const handleDelete = (id) => {
+//         Swal.fire({
+//             title: "Apakah Anda yakin?",
+//             text: "Anda tidak akan bisa mengembalikannya lagi!",
+//             icon: "warning",
+//             showCancelButton: true,
+//             confirmButtonColor: "#d33",
+//             cancelButtonColor: "#3085d6",
+//             confirmButtonText: "Ya, musnahkan!",
+//         }).then((result) => {
+//             if (result.isConfirmed) {
+//                 // Panggil route delete
+//                 router.delete(`/admin/kadaluarsa/${id}`, {
+//                     onSuccess: () => {
+//                         Swal.fire(
+//                             "Dimusnahkan!",
+//                             "Kadaluarsa telah dihapus.",
+//                             "success",
+//                         );
+//                         window.location.reload(); // Refresh halaman setelah berhasil menghapus
+//                     },
+//                     onError: () => {
+//                         Swal.fire(
+//                             "Error!",
+//                             "Terjadi masalah saat menghapus kategori.",
+//                             "error",
+//                         );
+//                     },
+//                 });
+//             }
+//         });
+//     };
+
+//     if (kadaluarsa || hampir) {
+//         return (
+//             hasAnyPermission(["kadaluarsa.delete"]) && (
+//                 <button
+//                     className="btn btn-outline-danger btn-sm rounded"
+//                     onClick={() => handleDelete(id)}
+//                 >
+//                     <i className="bi bi-trash-fill"></i> Musnahkan
+//                 </button>
+//             )
+//         );
+//     }
+// };
 
 const Index = () => {
     const { obats, status, today, threshold } = usePage().props;
@@ -61,6 +97,18 @@ const Index = () => {
                     <div className="col-12">
                         <div className="card border rounded">
                             <div className="card-body p-0">
+                                <div className="d-flex justify-content-end align-items-center">
+                                    {hasAnyPermission([
+                                        "kadaluarsa.musnah",
+                                    ]) && (
+                                        <Link
+                                            className="btn btn-danger btn-sm rounded m-3"
+                                            href="/admin/kadaluarsa/musnah"
+                                        >
+                                            Musnahkan Obat
+                                        </Link>
+                                    )}
+                                </div>
                                 <div className="table-responsive pb-1">
                                     <table className="table align-middle table-hover">
                                         <thead className="table-light text-white">
@@ -74,7 +122,6 @@ const Index = () => {
                                                 <th>Stok</th>
                                                 <th>Kadaluarsa</th>
                                                 <th>Status</th>
-                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -103,7 +150,9 @@ const Index = () => {
                                                                     <img
                                                                         src={`/storage/obats/${obat.medicines.gambar_obat}`}
                                                                         alt={
-                                                                            obat.medicines.gambar_obat
+                                                                            obat
+                                                                                .medicines
+                                                                                .gambar_obat
                                                                         }
                                                                         width="50"
                                                                         height="50"
@@ -114,7 +163,9 @@ const Index = () => {
                                                                     />
                                                                 </td>
                                                                 <td>
-                                                                    {obat.medicines.nama_obat ||
+                                                                    {obat
+                                                                        .medicines
+                                                                        .nama_obat ||
                                                                         "Nama tidak tersedia"}
                                                                 </td>
                                                                 <td>
@@ -123,7 +174,8 @@ const Index = () => {
                                                                 </td>
 
                                                                 <td>
-                                                                    {obat.stock_quantity || 0}
+                                                                    {obat.stock_quantity ||
+                                                                        0}
                                                                 </td>
                                                                 <td>
                                                                     {obat.kadaluarsa ||
@@ -142,12 +194,13 @@ const Index = () => {
                                                                         }
                                                                     />
                                                                 </td>
-                                                                <td>
+                                                                {/* <td>
                                                                     {btnMushnah(
                                                                         isKadaluarsa,
                                                                         isHampir,
+                                                                        obat.id,
                                                                     )}
-                                                                </td>
+                                                                </td> */}
                                                             </tr>
                                                         );
                                                     },
@@ -158,8 +211,8 @@ const Index = () => {
                                                         className="text-center"
                                                         colSpan="10"
                                                     >
-                                                        Tidak ada obat kadaluarsa
-                                                        ditemukan
+                                                        Tidak ada obat
+                                                        kadaluarsa ditemukan
                                                     </td>
                                                 </tr>
                                             )}

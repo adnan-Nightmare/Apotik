@@ -7,6 +7,7 @@ use App\Models\customer;
 use App\Models\medicines;
 use App\Models\StockProduct;
 use App\Models\StockTotal;
+use App\Models\Supplier;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use Carbon\Carbon;
@@ -24,8 +25,8 @@ class DashboardController extends Controller
     {   
         // Statistik utama
         $totalSales = Transaction::where('status', 'success')->sum('total_amount');
-        $totalTransactions  = Transaction::count();
-        $totalCustomers     = customer::count();
+        $totalStokKeseluruhan = StockTotal::sum('total_stock');
+        $totalSuppliers = Supplier::count();
         $totalObat = medicines::count();
 
         // Total transaksi per status
@@ -43,7 +44,7 @@ class DashboardController extends Controller
             ->groupBy('date')
             ->orderBy('date')
             ->get();
-
+        
 
         // produk terlaris
         $productsData = TransactionDetail::with('medicines')
@@ -84,8 +85,8 @@ class DashboardController extends Controller
         return Inertia::render('Admin/Dashboard/Index', [
             'stats' => [
                 'totalObat' => $totalObat,
-                'totalCustomers'    => $totalCustomers,
-                'totalTransactions' => $totalTransactions,
+                'totalCustomers'    => $totalSuppliers,
+                'totalTransactions' => $totalStokKeseluruhan,
                 'totalSales'        => $totalSales,
             ],
             'stockProduct' => $stockProduct,
