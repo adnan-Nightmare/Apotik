@@ -136,7 +136,7 @@ const Index = () => {
                                         {obats &&
                                             obats.length > 0 && (
                                                 <a
-                                                    href="/admin/export-supplier"
+                                                    href="/admin/export-kadaluarsa"
                                                     className="btn btn-sm btn-primary mx-3 my-2"
                                                 >
                                                     Export Excel

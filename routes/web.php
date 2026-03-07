@@ -1,5 +1,7 @@
 <?php
 
+use App\Exports\KadaluarsaReportExport;
+use App\Exports\PembelianReportExport;
 use App\Exports\StockReportExport;
 use App\Exports\SupplierReportExport;
 use App\Http\Controllers\Admin\CustomerController;
@@ -52,8 +54,12 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
         return Excel::download(new StockReportExport, 'laporan_stok.xlsx');
     });
 
-        Route::get('/export-pembelian', function () {
-        return Excel::download(new SupplierReportExport, 'laporan_supplier.xlsx');
+    Route::get('/export-pembelian', function () {
+        return Excel::download(new PembelianReportExport, 'laporan_pembelian.xlsx');
+    });
+
+    Route::get('/export-kadaluarsa', function () {
+        return Excel::download(new KadaluarsaReportExport, 'laporan_kadaluarsa.xlsx');
     });
 
     $resources = [
